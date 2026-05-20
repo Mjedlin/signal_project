@@ -7,10 +7,11 @@ import java.util.Map;
 import com.alerts.AlertGenerator;
 
 /**
- * Manages storage and retrieval of patient data within a healthcare monitoring
- * system.
- * This class serves as a repository for all patient records, organized by
- * patient IDs.
+ * Manages the storage and retrieval of patient data within the system.
+ * <p>
+ * This class serves as the central repository for all patient records, 
+ * providing methods to add new data, retrieve specific records, and manage 
+ * patient instances globally.
  */
 public class DataStorage {
     private Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.

@@ -1,0 +1,29 @@
+Architectural Justification: State Management
+
+The State Management subsystem is designed to handle the continuous evaluation of patient health data to trigger critical alerts. The core of this subsystem is the AlertGenerator, which acts as the context for evaluating incoming metrics. 
+To ensure high cohesion and adhere to the Open/Closed Principle, the Strategy design pattern is employed. The AlertStrategy interface defines a common contract for condition checking, allowing specific concrete strategies (like BloodPressureStrategy and OxygenSaturationStrategy) to encapsulate their unique clinical logic and thresholds. 
+This decoupled architecture ensures that adding new physiological alerts in the future will not require modifying the existing core evaluation logic. Furthermore, the HealthDataSimulator is modeled as a context manager that holds the instance of AlertGenerator, ensuring centralized state evaluation.
+
+
+
+Architectural Justification: Data Generation Subsystem
+
+The Data Generation subsystem is structured around the Strategy design pattern to provide a highly extensible and maintainable mechanism for simulating various physiological signals. The HealthDataSimulator acts as the context, maintaining a collection of DataGenerator interfaces. 
+By programming to the DataGenerator interface rather than concrete classes, the system adheres to the Open/Closed Principle. New types of health data (e.g., Blood Levels, ECG, Blood Pressure) can be seamlessly introduced by creating new concrete generator classes without modifying the core simulation loop. 
+This loose coupling ensures that the complex, domain-specific logic of generating realistic medical data is cleanly encapsulated within its respective class, making testing and scaling much easier.
+
+
+
+Architectural Justification: Patient Data Management Subsystem
+
+The Patient Data Management subsystem focuses on data organization and accessibility. The design revolves around a composition hierarchy: DataStorage manages a collection of Patient objects, and each Patient manages their own list of PatientRecord objects.
+The DataStorage class implements the Singleton design pattern to ensure a single, centralized in-memory repository for all generated health data across the entire application runtime. This guarantees consistency when multiple system components (like generators and evaluators) attempt to read or write data simultaneously.
+The structured delegation (DataStorage calling Patient methods, which in turn manage PatientRecords) enforces strong encapsulation. It ensures that raw patient data is not manipulated externally, preserving data integrity within the CHMS.
+
+
+
+Architectural Justification: Data Access Layer
+
+The Data Access Layer focuses on the safe and decoupled retrieval of stored information. The architecture uses a delegation model where DataStorage acts as a facade for accessing records. When queried for a specific patient's data, DataStorage delegates the actual filtering logic to the specific Patient instance.
+This design adheres to the Single Responsibility Principle: DataStorage is responsible for managing the collection of patients, while the Patient class is responsible for managing and filtering its own specific PatientRecords. This prevents the central storage class from becoming a bloated "god object" and keeps the temporal filtering logic localized to the patient level. 
+Furthermore, the inclusion of the DataStorageTest class in the design emphasizes a Test-Driven approach, ensuring the data retrieval API remains stable and reliable as the application scales.
