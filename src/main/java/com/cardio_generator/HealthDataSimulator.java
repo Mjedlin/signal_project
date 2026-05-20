@@ -25,6 +25,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * The main entry point for the Cardiovascular Health Monitoring System (CHMS) simulator.
+ * <p>
+ * This class initializes and runs a simulation of patient health data, generating 
+ * mock physiological signals (like ECG, Blood Pressure) and routing them to 
+ * the specified output strategies (e.g., Console, WebSocket, File).
+ */
 public class HealthDataSimulator {
 
     private static int patientCount = 50; // Default number of patients
@@ -32,6 +39,16 @@ public class HealthDataSimulator {
     private static OutputStrategy outputStrategy = new ConsoleOutputStrategy(); // Default output strategy
     private static final Random random = new Random();
 
+    /**
+     * The main method that configures and starts the health data simulation.
+     * <p>
+     * It parses command-line arguments to determine the number of patients and the 
+     * desired output strategy, initializes the data generators, and starts the simulation loop.
+     *
+     * @param args the command-line arguments used to configure the simulation.
+     * Expected arguments: [--patient-count <count>] [--output <type>]
+     * @throws IOException if there is an issue initializing the file output strategy or reading configurations
+     */
     public static void main(String[] args) throws IOException {
 
         parseArguments(args);
